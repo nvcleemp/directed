@@ -235,6 +235,19 @@ int read_watercluster_format(unsigned char code[], int *length, FILE *file) {
     return (1);
 }
 
+//array to store code in watercluster format
+unsigned char code[MAXCODELENGTH];
+
+boolean read_graph_from_watercluster_format(FILE *f, GRAPH graph, DEGREES out, DEGREES in){
+    int length;
+    if (read_watercluster_format(code, &length, stdin)) {
+        decode_watercluster_format(code, length, graph, out, in);
+        return TRUE;
+    } else {
+        return FALSE;
+    }
+}
+
 void write_watercluster_format(GRAPH graph, DEGREES out, FILE *f){
     int i, j;
     
@@ -360,7 +373,14 @@ boolean decode_digraph6(GRAPH graph, DEGREES out, DEGREES in){
     }
 }
 
-
+boolean read_graph_from_digraph6_file(FILE *f, GRAPH graph, DEGREES out, DEGREES in){
+    if (nvcleemp_getline(stdin)) {
+        decode_digraph6(graph, out, in);
+        return TRUE;
+    } else {
+        return FALSE;
+    }
+}
 //====================== USAGE =======================
 
 void help(char *name) {
@@ -398,7 +418,8 @@ int main(int argc, char** argv) {
     
     boolean do_filtering = FALSE;
     boolean invert = FALSE;
-    boolean waterclusterformat = TRUE;
+    
+    boolean (*read_graph)(FILE *, GRAPH, DEGREES, DEGREES) = read_graph_from_watercluster_format;
     
     int update = 0;
     
@@ -428,7 +449,7 @@ int main(int argc, char** argv) {
                 do_filtering = TRUE;
                 break;
             case 'D':
-                waterclusterformat = FALSE;
+                read_graph = read_graph_from_digraph6_file;
                 break;
             case 'h':
                 help(name);
@@ -447,56 +468,26 @@ int main(int argc, char** argv) {
         update = 0;
     }
 
-    if(waterclusterformat){
-        unsigned char code[MAXCODELENGTH];
-        int length;
-        while (read_watercluster_format(code, &length, stdin)) {
-            decode_watercluster_format(code, length, graph, out, in);
-            graph_count++;
-            
-            boolean value = is_hypohamiltonian(graph, out, in);
-            if(do_filtering){
-                if(invert && !value){
-                    filtered_count++;
-                    write_watercluster_format(graph, out, stdout);
-                } else if(!invert && value){
-                    filtered_count++;
-                    write_watercluster_format(graph, out, stdout);
-                }
-                if(update && !(graph_count % update)){
-                    fprintf(stderr, "Read: %d. Filtered: %d\n", graph_count, filtered_count);
-                }
-            } else {
-                if(value){
-                    fprintf(stdout, "Graph %d is hypohamiltonian.\n", graph_count);
-                } else {
-                    fprintf(stdout, "Graph %d is not hypohamiltonian.\n", graph_count);
-                }
+    while (read_graph(stdin, graph, out, in)) {
+        graph_count++;
+
+        boolean value = is_hypohamiltonian(graph, out, in);
+        if(do_filtering){
+            if(invert && !value){
+                filtered_count++;
+                write_watercluster_format(graph, out, stdout);
+            } else if(!invert && value){
+                filtered_count++;
+                write_watercluster_format(graph, out, stdout);
             }
-        }
-    } else {
-        while (nvcleemp_getline(stdin)) {
-            decode_digraph6(graph, out, in);
-            graph_count++;
-            
-            boolean value = is_hypohamiltonian(graph, out, in);
-            if(do_filtering){
-                if(invert && !value){
-                    filtered_count++;
-                    write_watercluster_format(graph, out, stdout);
-                } else if(!invert && value){
-                    filtered_count++;
-                    write_watercluster_format(graph, out, stdout);
-                }
-                if(update && !(graph_count % update)){
-                    fprintf(stderr, "Read: %d. Filtered: %d\n", graph_count, filtered_count);
-                }
+            if(update && !(graph_count % update)){
+                fprintf(stderr, "Read: %d. Filtered: %d\n", graph_count, filtered_count);
+            }
+        } else {
+            if(value){
+                fprintf(stdout, "Graph %d is hypohamiltonian.\n", graph_count);
             } else {
-                if(value){
-                    fprintf(stdout, "Graph %d is hypohamiltonian.\n", graph_count);
-                } else {
-                    fprintf(stdout, "Graph %d is not hypohamiltonian.\n", graph_count);
-                }
+                fprintf(stdout, "Graph %d is not hypohamiltonian.\n", graph_count);
             }
         }
     }
