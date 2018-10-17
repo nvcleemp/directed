@@ -156,9 +156,6 @@ boolean is_hypohamiltonian(GRAPH graph, DEGREES out, DEGREES in){
         }
     }
     
-    print_graph(graph, out, in);
-    
-    
     return TRUE;
 }
 
