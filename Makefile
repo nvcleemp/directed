@@ -4,13 +4,13 @@ clean:
 
 scripts: build/wcf2tikz.py build/wcf2multi.py 
 
-build/directed_is_hypohamiltonian: hypospanning/directed_is_hypohamiltonian.c
+build/directed_is_hypohamiltonian: hypospanning/directed_is_hypohamiltonian.c shared/directed_io.c
 	mkdir -p build
-	$(CC) -o build/directed_is_hypohamiltonian -O4 hypospanning/directed_is_hypohamiltonian.c
+	$(CC) -o $@ -O4 $^
 
-build/directed_is_hypotraceable: hypospanning/directed_is_hypotraceable.c
+build/directed_is_hypotraceable: hypospanning/directed_is_hypotraceable.c shared/directed_io.c
 	mkdir -p build
-	$(CC) -o build/directed_is_hypotraceable -O4 hypospanning/directed_is_hypotraceable.c
+	$(CC) -o $@ -O4 $^
 
 build/wcf2tikz.py: tools/wcf2tikz.py
 	mkdir -p build
