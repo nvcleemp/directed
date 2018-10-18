@@ -3,8 +3,8 @@
  * Copyright (C) 2018 Ghent University.
  */
 
-/* This program reads directed graphs in watercluster format from standard in
- * and determines whether they are hypotraceable.
+/* This program reads directed graphs in watercluster or digraph6 format from 
+ * standard in and determines whether they are hypotraceable.
  * 
  * 
  * Compile with:
