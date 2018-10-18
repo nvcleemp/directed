@@ -378,6 +378,7 @@ boolean read_graph_from_digraph6_file(FILE *f, GRAPH graph, DEGREES out, DEGREES
         return FALSE;
     }
 }
+
 //====================== USAGE =======================
 
 void help(char *name) {
