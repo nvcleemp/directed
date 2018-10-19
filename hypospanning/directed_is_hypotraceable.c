@@ -20,9 +20,9 @@
 #include "../shared/directed_base.h"
 #include "../shared/directed_io.h"
 
-int graph_count = 0;
-int filtered_count = 0;
-int valid_orientation = 0;
+unsigned long long int graph_count = 0;
+unsigned long long int filtered_count = 0;
+unsigned long long int valid_orientation = 0;
 
 //================ HYPOTRACEABLE ===================
 
@@ -289,21 +289,21 @@ int main(int argc, char** argv) {
                 write_watercluster_format(graph, out, stdout);
             }
             if(update && !(graph_count % update)){
-                fprintf(stderr, "Read: %d. Filtered: %d\n", graph_count, filtered_count);
+                fprintf(stderr, "Read: %llu. Filtered: %llu\n", graph_count, filtered_count);
             }
         } else {
             if(value){
-                fprintf(stdout, "Graph %d is hypotraceable.\n", graph_count);
+                fprintf(stdout, "Graph %llu is hypotraceable.\n", graph_count);
             } else {
-                fprintf(stdout, "Graph %d is not hypotraceable.\n", graph_count);
+                fprintf(stdout, "Graph %llu is not hypotraceable.\n", graph_count);
             }
         }
     }
     
-    fprintf(stderr, "Read %d graph%s.\n", graph_count, graph_count==1 ? "" : "s");
-    fprintf(stderr, "Valid orientation: %d\n", valid_orientation);
+    fprintf(stderr, "Read %llu graph%s.\n", graph_count, graph_count==1 ? "" : "s");
+    fprintf(stderr, "Valid orientation: %llu\n", valid_orientation);
     if(do_filtering){
-        fprintf(stderr, "Filtered %d graph%s.\n", filtered_count, filtered_count==1 ? "" : "s");
+        fprintf(stderr, "Filtered %llu graph%s.\n", filtered_count, filtered_count==1 ? "" : "s");
     }
 
     return (EXIT_SUCCESS);
