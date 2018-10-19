@@ -21,6 +21,8 @@ extern "C" {
 
 boolean read_graph_from_watercluster_file(FILE *f, GRAPH graph, DEGREES out, DEGREES in);
 
+void write_watercluster_format(GRAPH graph, DEGREES out, FILE *f);
+
 boolean read_graph_from_digraph6_file(FILE *f, GRAPH graph, DEGREES out, DEGREES in);
 
 #ifdef	__cplusplus
