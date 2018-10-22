@@ -23,8 +23,11 @@ typedef unsigned char DEGREES[MAXN + 1];
 extern "C" {
 #endif
 
+void add_arc(GRAPH graph, DEGREES out, DEGREES in, int from, int to);
+void remove_arc(GRAPH graph, DEGREES out, DEGREES in, int from, int to);
+void flip_arc(GRAPH graph, DEGREES out, DEGREES in, int from, int to);
 
-
+boolean has_arc(GRAPH graph, DEGREES out, int from, int to);
 
 #ifdef	__cplusplus
 }
