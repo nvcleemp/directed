@@ -24,19 +24,6 @@ unsigned long long int graph_count = 0;
 unsigned long long int filtered_count = 0;
 unsigned long long int valid_orientation_count = 0;
 
-void print_graph(GRAPH graph, DEGREES out, DEGREES in){
-    int i, j;
-    
-    for(i = 1; i <= graph[0][0]; i++){
-        fprintf(stderr, "%d (%d/%d) ", i, in[i], out[i]);
-        for(j = 0; j < out[i]; j++){
-            fprintf(stderr, "%d ", graph[i][j]);
-        }
-        fprintf(stderr, "\n");
-    }
-    fprintf(stderr, "\n");
-}
-
 //================ HYPOHAMILTONIAN ===================
 
 boolean current_cycle[MAXN+1];
