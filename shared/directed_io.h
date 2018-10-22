@@ -25,6 +25,11 @@ void write_watercluster_format(GRAPH graph, DEGREES out, FILE *f);
 
 boolean read_graph_from_digraph6_file(FILE *f, GRAPH graph, DEGREES out, DEGREES in);
 
+/**
+ * Prints a human readable representation of the graph.
+ */
+void print_graph(FILE *f, GRAPH graph, DEGREES out, DEGREES in);
+
 #ifdef	__cplusplus
 }
 #endif

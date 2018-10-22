@@ -228,3 +228,15 @@ boolean read_graph_from_digraph6_file(FILE *f, GRAPH graph, DEGREES out, DEGREES
     }
 }
 
+void print_graph(FILE *f, GRAPH graph, DEGREES out, DEGREES in){
+    int i, j;
+    
+    for(i = 1; i <= graph[0][0]; i++){
+        fprintf(f, "%d (%d/%d): ", i, in[i], out[i]);
+        for(j = 0; j < out[i]; j++){
+            fprintf(f, "%d ", graph[i][j]);
+        }
+        fprintf(f, "\n");
+    }
+    fprintf(f, "\n");
+}
