@@ -5,6 +5,7 @@
  * Created on October 18, 2018, 1:36 PM
  */
 
+#include <stdlib.h>
 #include <stdio.h>
 #include "directed_base.h"
 
