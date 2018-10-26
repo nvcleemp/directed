@@ -29,6 +29,8 @@ void flip_arc(GRAPH graph, DEGREES out, DEGREES in, int from, int to);
 
 boolean has_arc(GRAPH graph, DEGREES out, int from, int to);
 
+void relabel_graph(GRAPH orig_graph, DEGREES orig_out, DEGREES orig_in, GRAPH copy_graph, DEGREES copy_out, DEGREES copy_in, int relabeling[MAXN+1], int new_order);
+
 #ifdef	__cplusplus
 }
 #endif
