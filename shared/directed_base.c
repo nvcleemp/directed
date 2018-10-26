@@ -70,3 +70,27 @@ void relabel_graph(GRAPH orig_graph, DEGREES orig_out, DEGREES orig_in, GRAPH co
         copy_in[new_label] = orig_in[i];
     }
 }
+
+void union_graphs(GRAPH graph1, DEGREES out1, DEGREES in1, GRAPH graph2, DEGREES out2, DEGREES in2, GRAPH union_graph, DEGREES union_out, DEGREES union_in){
+    int i, j;
+    
+    //clear union
+    union_graph[0][0] = graph1[0][0] > graph2[0][0] ? graph1[0][0] : graph2[0][0];
+    for(i = 1; i <= union_graph[0][0]; i++){
+        union_in[i] = union_out[i] = 0;
+    }
+    
+    //copy in the structure of graph 1
+    for(i = 1; i <= graph1[0][0]; i++){
+        for(j = 0; j < out1[i]; j++){
+            add_arc(union_graph, union_out, union_in, i, graph1[i][j]);
+        }
+    }
+    
+    //copy in the structure of graph 2
+    for(i = 1; i <= graph2[0][0]; i++){
+        for(j = 0; j < out2[i]; j++){
+            add_arc(union_graph, union_out, union_in, i, graph2[i][j]);
+        }
+    }
+}
