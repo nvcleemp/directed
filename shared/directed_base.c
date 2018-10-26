@@ -40,6 +40,17 @@ boolean has_arc(GRAPH graph, DEGREES out, int from, int to){
     return i != out[from];
 }
 
+void copy_graph(GRAPH orig_graph, DEGREES orig_out, DEGREES orig_in, GRAPH copy_graph, DEGREES copy_out, DEGREES copy_in){
+    int i, j;
+    for(i = 1; i <= orig_graph[0][0]; i++){
+        for(j = 0; j < orig_out[i]; j++){
+            copy_graph[i][j] = orig_graph[i][j];
+        }
+        copy_out[i] = orig_out[i];
+        copy_in[i] = orig_in[i];
+    }
+}
+
 void relabel_graph(GRAPH orig_graph, DEGREES orig_out, DEGREES orig_in, GRAPH copy_graph, DEGREES copy_out, DEGREES copy_in, int relabeling[MAXN+1], int new_order){
     int i, j;
     
