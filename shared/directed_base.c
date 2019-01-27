@@ -41,6 +41,17 @@ boolean has_arc(GRAPH graph, DEGREES out, int from, int to){
     return i != out[from];
 }
 
+void prepare_graph(GRAPH graph, DEGREES out, DEGREES in, int order){
+    int i;
+    
+    graph[0][0] = order;
+    
+    for (i = 1; i <= order; i++) {
+        out[i] = 0;
+        in[i] = 0;
+    }
+}
+
 void copy_graph(GRAPH orig_graph, DEGREES orig_out, DEGREES orig_in, GRAPH copy_graph, DEGREES copy_out, DEGREES copy_in){
     int i, j;
     for(i = 1; i <= orig_graph[0][0]; i++){
