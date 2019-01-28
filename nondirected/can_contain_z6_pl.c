@@ -71,7 +71,8 @@ static int markvalue = 30000;
 #define ISMARKEDLO(e) ((e)->mark == markvalue)
 #define ISMARKEDHI(e) ((e)->mark > markvalue)
 
-int edgecode = FALSE;
+boolean edgecode = FALSE;
+boolean quartic = FALSE;
 
 int read_graph_count = 0;
 int filtered_graph_count = 0;
@@ -95,7 +96,14 @@ boolean contains_triangle_neighbouring_3_triangles(){
             if(face_size[e1->inverse->rightface]==3 &&
                     face_size[e2->inverse->rightface]==3 &&
                     face_size[e3->inverse->rightface]==3){
-                return TRUE;
+                if(quartic){
+                    if(degree[e1->start]==4 &&
+                            degree[e2->start]==4 &&
+                            degree[e3->start]==4)
+                        return TRUE;
+                } else {
+                    return TRUE;
+                }
             }
         }
     }
@@ -480,6 +488,8 @@ void help(char *name) {
     fprintf(stderr, "\nThis program can handle graphs up to %d vertices. Recompile if you need larger\n", MAXN);
     fprintf(stderr, "graphs.\n\n");
     fprintf(stderr, "Valid options\n=============\n");
+    fprintf(stderr, "    -4\n");
+    fprintf(stderr, "       Only filter if the vertices of the triangle have degree 4.\n");
     fprintf(stderr, "    -E, --edgecode\n");
     fprintf(stderr, "       Write edge code instead of planar code.\n");
     fprintf(stderr, "    -h, --help\n");
@@ -503,12 +513,15 @@ int main(int argc, char *argv[]) {
     };
     int option_index = 0;
 
-    while ((c = getopt_long(argc, argv, "hE", long_options, &option_index)) != -1) {
+    while ((c = getopt_long(argc, argv, "hE4", long_options, &option_index)) != -1) {
         switch (c) {
             case 0:
                 break;
             case 'E':
                 edgecode = TRUE;
+                break;
+            case '4':
+                quartic = TRUE;
                 break;
             case 'h':
                 help(name);
@@ -542,6 +555,6 @@ int main(int argc, char *argv[]) {
     
     fprintf(stderr, "Read %d graph%s.\n", read_graph_count, 
                 read_graph_count==1 ? "" : "s");
-    fprintf(stderr, "Filtered %d graph%s containing a triangle neighbouring 3 triangles.\n", filtered_graph_count, 
-                filtered_graph_count==1 ? "" : "s");
+    fprintf(stderr, "Filtered %d graph%s containing a %striangle neighbouring 3 triangles.\n", filtered_graph_count, 
+                filtered_graph_count==1 ? "" : "s", quartic ? "quartic " : "");
 }
