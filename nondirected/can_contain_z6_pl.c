@@ -490,6 +490,8 @@ void help(char *name) {
     fprintf(stderr, "Valid options\n=============\n");
     fprintf(stderr, "    -4\n");
     fprintf(stderr, "       Only filter if the vertices of the triangle have degree 4.\n");
+    fprintf(stderr, "    -i, --invert\n");
+    fprintf(stderr, "       Invert the filter.\n");
     fprintf(stderr, "    -E, --edgecode\n");
     fprintf(stderr, "       Write edge code instead of planar code.\n");
     fprintf(stderr, "    -h, --help\n");
@@ -502,20 +504,26 @@ void usage(char *name) {
 }
 
 int main(int argc, char *argv[]) {
+    
+    boolean invert = FALSE;
 
     /*=========== commandline parsing ===========*/
 
     int c;
     char *name = argv[0];
     static struct option long_options[] = {
+        {"invert", no_argument, NULL, 'i'},
         {"edgecode", no_argument, NULL, 'E'},
         {"help", no_argument, NULL, 'h'}
     };
     int option_index = 0;
 
-    while ((c = getopt_long(argc, argv, "hE4", long_options, &option_index)) != -1) {
+    while ((c = getopt_long(argc, argv, "hE4i", long_options, &option_index)) != -1) {
         switch (c) {
             case 0:
+                break;
+            case 'i':
+                invert = TRUE;
                 break;
             case 'E':
                 edgecode = TRUE;
@@ -540,21 +548,36 @@ int main(int argc, char *argv[]) {
 
     unsigned short code[MAXCODELENGTH];
     int length;
-    while (read_planar_code(code, &length, stdin)) {
-        decode_planar_code(code);
-        if(contains_triangle_neighbouring_3_triangles()){
-            if(edgecode){
-                write_edge_code();
-            } else {
-                write_planar_code();
+    if(invert){
+        while (read_planar_code(code, &length, stdin)) {
+            decode_planar_code(code);
+            if(!contains_triangle_neighbouring_3_triangles()){
+                if(edgecode){
+                    write_edge_code();
+                } else {
+                    write_planar_code();
+                }
+                filtered_graph_count++;
             }
-            filtered_graph_count++;
+            read_graph_count++;
         }
-        read_graph_count++;
+    } else {
+        while (read_planar_code(code, &length, stdin)) {
+            decode_planar_code(code);
+            if(contains_triangle_neighbouring_3_triangles()){
+                if(edgecode){
+                    write_edge_code();
+                } else {
+                    write_planar_code();
+                }
+                filtered_graph_count++;
+            }
+            read_graph_count++;
+        }
     }
     
     fprintf(stderr, "Read %d graph%s.\n", read_graph_count, 
                 read_graph_count==1 ? "" : "s");
-    fprintf(stderr, "Filtered %d graph%s containing a %striangle neighbouring 3 triangles.\n", filtered_graph_count, 
-                filtered_graph_count==1 ? "" : "s", quartic ? "quartic " : "");
+    fprintf(stderr, "Filtered %d graph%s %scontaining a %striangle neighbouring 3 triangles.\n", filtered_graph_count, 
+                filtered_graph_count==1 ? "" : "s", invert ? "not " : "", quartic ? "quartic " : "");
 }
